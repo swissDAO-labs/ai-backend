@@ -19,15 +19,15 @@ async def health_check():
     return {"status": "healthy"}
 
 class PredictionParameters(BaseModel):
-    seed: str
-    prompt: float  # TODO: Could be kept constant across runs
+    seed: int
+    prompt: str  # TODO: Could be kept constant across runs
 
 @app.post("/predict")
 async def predict(params: PredictionParameters) -> Union[dict]:
     """
         Example request:
         ```
-            curl -X POST -H "Content-Type: application/json" -d '{"seed": "42", "prompt": "Peaky Blinders NFT. Faces are not directly visible. No text."}' http://127.0.0.1:2500/predict
+            curl -X POST -H "Content-Type: application/json" -d '{"seed": 42, "prompt": "Peaky Blinders NFT. Faces are not directly visible. No text."}' http://127.0.0.1:2500/predict
         ```
     """
     # TODO: Replace with logging

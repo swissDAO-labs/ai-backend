@@ -19,52 +19,50 @@ class StableDiffusionXlLight:
         # Pick:
         # -    2, 4 or 8 steps for lora,
         # - 1, 2, 4 or 8 steps for unet.
-        num_inference_steps = 4
+        self.num_inference_steps = 4
 
         # Prefer "unet" over "lora" for quality.
-        use_lora = False
-        model_type = "lora" if use_lora else "unet"
+        self.use_lora = False
+        self.model_type = "lora" if self.use_lora else "unet"
 
-        base = "stabilityai/stable-diffusion-xl-base-1.0"
-        repo = "ByteDance/SDXL-Lightning"
-        ckpt = f"sdxl_lightning_{num_inference_steps}step_{model_type}.safetensors"
+        self.base = "stabilityai/stable-diffusion-xl-base-1.0"
+        self.repo = "ByteDance/SDXL-Lightning"
+        self.ckpt = f"sdxl_lightning_{self.num_inference_steps}step_{self.model_type}.safetensors"
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         # Fetch the model from disk
         # At build, this should've been already downloaded
         self.unet = UNet2DConditionModel.from_config(
-            base,
+            self.base,
             subfolder="unet",
         ).to(self.device, torch.float16)
 
         self.unet.load_state_dict(
             load_file(
                 hf_hub_download(
-                    repo,
-                    ckpt,
+                    self.repo,
+                    self.ckpt,
                 ),
                 device=self.device,
             ),
         )
         
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
-            base,
+            self.base,
             unet=self.unet,
             torch_dtype=torch.float16,
             use_safetensors=True,
             variant="fp16",
         ).to(self.device)
 
-        if use_lora:
-            self.pipe.load_lora_weights(hf_hub_download(repo, ckpt))
+        if self.use_lora:
+            self.pipe.load_lora_weights(hf_hub_download(self.repo, self.ckpt))
             self.pipe.fuse_lora()
 
             self.pipe.scheduler = EulerDiscreteScheduler.from_config(
                 self.pipe.scheduler.config,
                 timestep_spacing="trailing",
             )
-
-        pass
 
     def predict(self, seed, prompt) -> any:
         """
