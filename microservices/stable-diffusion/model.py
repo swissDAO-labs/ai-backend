@@ -80,7 +80,7 @@ class StableDiffusionXlLight:
         print("Output (1) is: ", images)
         buffered = BytesIO()
         images[0].save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode()
+        img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
         print("Output (2) is: ", img_str)
         return img_str
 
