@@ -8,3 +8,7 @@ services:
     entrypoint: uvicorn --port 2500 --host 0.0.0.0 --backlog 100 --timeout-keep-alive 500 --workers 1 main:app
     ports:
       - 2500:2500
+  gradio-frontend:
+    build: ./simple-frontend
+    networks_mode: host
+    ports: 7860:7860
