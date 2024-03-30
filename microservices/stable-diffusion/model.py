@@ -8,7 +8,8 @@ import torch
 from diffusers import StableDiffusionXLPipeline, UNet2DConditionModel, EulerDiscreteScheduler
 from huggingface_hub import hf_hub_download
 from safetensors.torch import load_file
-
+import base64
+from io import BytesIO
 
 class StableDiffusionXlLight: 
     """
@@ -28,6 +29,7 @@ class StableDiffusionXlLight:
         self.base = "stabilityai/stable-diffusion-xl-base-1.0"
         self.repo = "ByteDance/SDXL-Lightning"
         self.ckpt = f"sdxl_lightning_{self.num_inference_steps}step_{self.model_type}.safetensors"
+        print("Is CUDA is available: ", torch.cuda.is_available())
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         # Fetch the model from disk
@@ -35,7 +37,7 @@ class StableDiffusionXlLight:
         self.unet = UNet2DConditionModel.from_config(
             self.base,
             subfolder="unet",
-        ).to(self.device, torch.float16)
+        ).to(self.device, torch.float16 if self.device == "cuda" else torch.float32)
 
         self.unet.load_state_dict(
             load_file(
@@ -50,9 +52,9 @@ class StableDiffusionXlLight:
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             self.base,
             unet=self.unet,
-            torch_dtype=torch.float16,
+            torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
             use_safetensors=True,
-            variant="fp16",
+            variant="fp16" if self.device == "cuda" else None,
         ).to(self.device)
 
         if self.use_lora:
@@ -73,13 +75,14 @@ class StableDiffusionXlLight:
             prompt = prompt,
             guidance_scale = 0.0,
             num_inference_steps = self.num_inference_steps,
-            generator = torch.Generator("cuda").manual_seed(seed),
+            generator = torch.Generator(self.device).manual_seed(seed),
         ).images
-        # images[0].save("output.jpg")
-        # TODO: Double check the format here
-        print("Output is: ", images)
-        print("Output shape is: ", images.shape)
-        return images[0]
+        print("Output (1) is: ", images)
+        buffered = BytesIO()
+        images[0].save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+        print("Output (2) is: ", img_str)
+        return img_str
 
 
 if __name__ == "__main__":

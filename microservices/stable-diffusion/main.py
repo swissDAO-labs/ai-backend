@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Union
 from model import StableDiffusionXlLight
+import time
 
 # Instantiate the model
 extractor = StableDiffusionXlLight()
@@ -34,7 +35,9 @@ async def predict(params: PredictionParameters) -> Union[dict]:
     print("Parameters ", params)
     try:
         # Read PDF file
+        start_time = time.time()
         out = extractor.predict(seed=params.seed, prompt=params.prompt)
+        print("Stablediffusion took this many seconds: ", time.time() - start_time)
         return {
             "response": out
         }

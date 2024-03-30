@@ -8,9 +8,10 @@ ENV HOME=/root
 WORKDIR /root
 
 COPY . /root/
+# RUN pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
 # This downloads and runs the models
 # TODO: Double check paths
-RUN --mount=type=cache,target=/root/.cache/huggingface python -c "from model import StableDiffusionXlLight; StableDiffusionXlLight()"
+# RUN --mount=type=cache,target=/root/.cache/huggingface python -c "from model import StableDiffusionXlLight; StableDiffusionXlLight()"
 
