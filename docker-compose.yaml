@@ -1,14 +1,17 @@
 version: '3.8'
 services:
-  models-stable-diffusion-xl-light:
-    build: ./microservices/stable-diffusion
-    volumes:
-      - ~/.cache/huggingface/:/root/.cache/huggingface/
-      - ~/.cache/pip/:/root/.cache/pip/
-    entrypoint: uvicorn --port 2500 --host 0.0.0.0 --backlog 100 --timeout-keep-alive 500 --workers 1 main:app
-    ports:
-      - 2500:2500
+  # models-stable-diffusion-xl-light:
+  #   build: ./microservices/stable-diffusion
+  #   volumes:
+  #     - ~/.cache/huggingface/:/root/.cache/huggingface/
+  #     - ~/.cache/pip/:/root/.cache/pip/
+  #   entrypoint: uvicorn --port 2500 --host 0.0.0.0 --backlog 100 --timeout-keep-alive 500 --workers 1 main:app
+  #   ports:
+  #     - 2500:2500
   gradio-frontend:
     build: ./simple-frontend
-    networks_mode: host
-    ports: 7860:7860
+    environment:
+      - API_STABLEDIFFUSION=http://localhost:2500/predict
+    entrypoint: python -m main
+    ports:
+      - 2503:2503

@@ -1,4 +1,4 @@
 gradio
 requests
 Pillow
-dotenv
+python-dotenv
