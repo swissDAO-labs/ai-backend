@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "ai-backend"
+version = "0.1.0"
+description = ""
+authors = ["Karrenbelt <m.a.p.karrenbelt@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.group.frontend.dependencies]
+gradio = "^4.24.0"
+requests = "^2.31.0"
+pillow = "^10.3.0"
+python-dotenv = "^1.0.1"
+
+[tool.poetry.group.stable-diff.dependencies]
+fastapi = "^0.110.0"
+uvicorn = "^0.29.0"
+diffusers = "^0.27.2"
+transformers = "^4.39.2"
+accelerate = "^0.28.0"
+mediapy = "^1.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
