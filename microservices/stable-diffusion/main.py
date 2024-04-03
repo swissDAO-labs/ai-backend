@@ -4,8 +4,12 @@ import time
 from typing import Union
 
 from model import StableDiffusionXlLight
+from utils import setup_logger
 from fastapi import FastAPI
 from pydantic import BaseModel
+
+
+logger = setup_logger("stable-diffusion-main")
 
 
 # Instantiate the model
@@ -38,15 +42,15 @@ async def predict(params: PredictionParameters) -> Union[dict]:
     curl -X POST -H "Content-Type: application/json" -d '{"seed": 42, "prompt": "Peaky Blinders NFT. Faces are not directly visible. No text."}' http://127.0.0.1:2500/predict
     ```
     """
-    # TODO: Replace with logging
-    print("Parameters ", params)
+    logger.info(f"Parameters {params}")
     try:
         # Read PDF file
         start_time = time.time()
         out = extractor.predict(seed=params.seed, prompt=params.prompt)
-        print("Stablediffusion took this many seconds: ", time.time() - start_time)
+        logger.info(f"Stablediffusion took {time.time() - start_time} seconds")
         return {"response": out}
     except Exception as e:
+        logger.error(f"An error occurred: {e}")
         return {"error": str(e)}
 
 
