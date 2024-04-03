@@ -74,7 +74,7 @@ class StableDiffusionXlLight:
                 timestep_spacing="trailing",
             )
 
-    def predict(self, seed, prompt) -> any:
+    def predict(self, seed: int, prompt: str) -> str:
         """
         Generate a picture from a given random seed (must be an integer), and a prompt
         """

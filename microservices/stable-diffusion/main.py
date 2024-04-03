@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import time
-from typing import Union
 
 from model import StableDiffusionXlLight
 from utils import setup_logger
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from pydantic import BaseModel
+from fastapi.responses import JSONResponse
 
 
 logger = setup_logger("stable-diffusion-main")
@@ -19,14 +19,14 @@ app = FastAPI()
 
 
 @app.get("/health")
-async def health_check():
+async def health_check() -> Response:
     """
     Example request:
     ```
     curl http://localhost:2500/health
     ```
     """
-    return {"status": "healthy"}
+    return JSONResponse(content={"status": "healthy"})
 
 
 class PredictionParameters(BaseModel):
@@ -35,7 +35,7 @@ class PredictionParameters(BaseModel):
 
 
 @app.post("/predict")
-async def predict(params: PredictionParameters) -> Union[dict]:
+async def predict(params: PredictionParameters) -> Response:
     """
     Example request:
     ```
@@ -48,10 +48,10 @@ async def predict(params: PredictionParameters) -> Union[dict]:
         start_time = time.time()
         out = extractor.predict(seed=params.seed, prompt=params.prompt)
         logger.info(f"Stablediffusion took {time.time() - start_time} seconds")
-        return {"response": out}
+        return JSONResponse(content={"response": out})
     except Exception as e:
         logger.error(f"An error occurred: {e}")
-        return {"error": str(e)}
+        return JSONResponse(content={"error": str(e)})
 
 
 if __name__ == "__main__":
