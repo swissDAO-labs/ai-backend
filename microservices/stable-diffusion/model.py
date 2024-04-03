@@ -1,19 +1,22 @@
 """
-    Majority of this file was imported from
-        - https://colab.research.google.com/drive/1SILA5bbgTKzr335K8RgqApqRJM7MchXV#scrollTo=ufD_d64nr08H
+Majority of this file was imported from
+    - https://colab.research.google.com/drive/1SILA5bbgTKzr335K8RgqApqRJM7MchXV#scrollTo=ufD_d64nr08H
 """
 
-import torch
+from __future__ import annotations
 
-from diffusers import StableDiffusionXLPipeline, UNet2DConditionModel, EulerDiscreteScheduler
-from huggingface_hub import hf_hub_download
-from safetensors.torch import load_file
 import base64
 from io import BytesIO
 
-class StableDiffusionXlLight: 
+import torch
+from diffusers import UNet2DConditionModel, EulerDiscreteScheduler, StableDiffusionXLPipeline
+from huggingface_hub import hf_hub_download
+from safetensors.torch import load_file
+
+
+class StableDiffusionXlLight:
     """
-        Stable Diffusion XL Light connector
+    Stable Diffusion XL Light connector
     """
 
     def __init__(self):
@@ -48,7 +51,7 @@ class StableDiffusionXlLight:
                 device=self.device,
             ),
         )
-        
+
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             self.base,
             unet=self.unet,
@@ -68,19 +71,19 @@ class StableDiffusionXlLight:
 
     def predict(self, seed, prompt) -> any:
         """
-            Generate a picture from a given random seed (must be an integer), and a prompt
+        Generate a picture from a given random seed (must be an integer), and a prompt
         """
 
         images = self.pipe(
-            prompt = prompt,
-            guidance_scale = 0.0,
-            num_inference_steps = self.num_inference_steps,
-            generator = torch.Generator(self.device).manual_seed(seed),
+            prompt=prompt,
+            guidance_scale=0.0,
+            num_inference_steps=self.num_inference_steps,
+            generator=torch.Generator(self.device).manual_seed(seed),
         ).images
         print("Output (1) is: ", images)
         buffered = BytesIO()
         images[0].save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
         print("Output (2) is: ", img_str)
         return img_str
 
@@ -93,13 +96,3 @@ if __name__ == "__main__":
     model = StableDiffusionXlLight()
     output = model.predict(seed, prompt)
     print(output)
-
-
-
-
-
-
-
-
-
-
