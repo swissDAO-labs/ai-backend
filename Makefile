@@ -17,3 +17,12 @@ clean:
 requirements:
 	@poetry export -f requirements.txt --output simple-frontend/requirements.txt --without-hashes --only frontend
 	@poetry export -f requirements.txt --output microservices/stable-diffusion/requirements.txt --without-hashes --only stable-diff
+
+.PHONY: format
+format:
+	@poetry run ruff check --select I --fix .
+	@poetry run ruff format .
+
+.PHONY: lint
+lint:
+	@poetry run ruff check .
