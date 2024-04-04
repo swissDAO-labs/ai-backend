@@ -17,6 +17,7 @@ clean:
 requirements:
 	@poetry export -f requirements.txt --output simple-frontend/requirements.txt --without-hashes --only frontend
 	@poetry export -f requirements.txt --output microservices/stable-diffusion/requirements.txt --without-hashes --only stable-diff
+	@poetry export -f requirements.txt --output microservices/event-listener/requirements.txt --without-hashes --only event-listener
 
 .PHONY: format
 format:
