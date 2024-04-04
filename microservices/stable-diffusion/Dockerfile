@@ -1,4 +1,5 @@
-FROM us-docker.pkg.dev/colab-images/public/runtime
+FROM pytorch/pytorch:latest
+# nvidia/cuda:11.4.0-base-ubuntu20.04
 
 RUN apt-get update -y
 RUN apt-get install -y libpoppler-dev poppler-utils ffmpeg libsm6 libxext6
