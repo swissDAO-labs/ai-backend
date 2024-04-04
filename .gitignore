@@ -3,6 +3,7 @@
 !.gitignore
 !.dockerignore
 !.env
+*.log
 
 # WARNING: 
 # The section between `# Clean` and `# End Clean` is used in Makefile for forceful removal
