@@ -26,6 +26,11 @@ transformers = "^4.39.2"
 accelerate = "^0.28.0"
 mediapy = "^1.2.0"
 
+
+[tool.poetry.group.event-listener.dependencies]
+web3 = "^6.16.0"
+pydantic = "^2.6.4"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
