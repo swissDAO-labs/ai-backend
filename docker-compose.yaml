@@ -9,6 +9,7 @@ services:
     image: yenicelik/models-stable-diffusion-xl-light:v0.1
     ports:
       - 2500:2500
+  # uvicorn --port 8080 --backlog 5 --timeout-keep-alive 500 --workers 1 main:app
   # gradio-frontend:
   #   build: ./simple-frontend
   #   environment:
