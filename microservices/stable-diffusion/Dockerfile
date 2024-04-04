@@ -1,4 +1,3 @@
-# syntax = docker/dockerfile:experimental
 FROM us-docker.pkg.dev/colab-images/public/runtime
 
 RUN apt-get update -y
@@ -9,7 +8,9 @@ WORKDIR /root
 
 COPY . /root/
 # RUN pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118
-RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
+RUN pip install -r requirements.txt
+
+# --mount=type=cache,target=/root/.cache/pip 
 
 # This downloads and runs the models
 # TODO: Double check paths

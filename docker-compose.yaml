@@ -6,6 +6,7 @@ services:
       - ~/.cache/huggingface/:/root/.cache/huggingface/
       - ~/.cache/pip/:/root/.cache/pip/
     entrypoint: uvicorn --port 2500 --host 0.0.0.0 --backlog 100 --timeout-keep-alive 500 --workers 1 main:app
+    image: yenicelik/models-stable-diffusion-xl-light:v0.1
     ports:
       - 2500:2500
   # gradio-frontend:
