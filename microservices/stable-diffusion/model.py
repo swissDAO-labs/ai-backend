@@ -5,10 +5,10 @@ Majority of this file was imported from
 
 from __future__ import annotations
 
-import base64
-from io import BytesIO
+from functools import lru_cache
 
 import torch
+from ipfs import Result, post_on_ipfs
 from utils import setup_logger
 from diffusers import UNet2DConditionModel, EulerDiscreteScheduler, StableDiffusionXLPipeline
 from huggingface_hub import hf_hub_download
@@ -74,30 +74,27 @@ class StableDiffusionXlLight:
                 timestep_spacing="trailing",
             )
 
-    def predict(self, seed: int, prompt: str) -> str:
+    @lru_cache()
+    def predict(self, seed: int, prompt: str) -> Result:
         """
         Generate a picture from a given random seed (must be an integer), and a prompt
         """
-
         images = self.pipe(
             prompt=prompt,
             guidance_scale=0.0,
             num_inference_steps=self.num_inference_steps,
             generator=torch.Generator(self.device).manual_seed(seed),
         ).images
-        logger.info(f"Output (1) is: {images}")
-        buffered = BytesIO()
-        images[0].save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
-        logger.info(f"Output (2) is: {img_str}")
-        return img_str
+        logger.info("Image generated: time to pin it on IPFS!")
+        result = post_on_ipfs(images[0])
+        logger.info(f"Image pinned on IPFS: {result.ipfs_hash}")
+        return result.dump()
 
 
 if __name__ == "__main__":
     logger.info("Testing StableDiffusionXlLight")
     prompt = "Peaky Blinders NFT. Faces are not directly visible. No text."
-    # seed = random.randint(0, sys.maxsize)
     seed = 42
     model = StableDiffusionXlLight()
-    output = model.predict(seed, prompt)
-    logger.info(f"Output: {output}")
+    result = model.predict(seed, prompt)
+    logger.info(f"Result: {result}")
