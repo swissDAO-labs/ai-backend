@@ -1649,6 +1649,20 @@ typing = ["typing-extensions"]
 xmp = ["defusedxml"]
 
 [[package]]
+name = "pinatapy-vourhey"
+version = "0.2.0"
+description = "Non-official Pinata.cloud library"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pinatapy-vourhey-0.2.0.tar.gz", hash = "sha256:453a32629ad11b92dd7153feb64d4302c8d17036cc17c5c3d8108809700bdc2b"},
+    {file = "pinatapy_vourhey-0.2.0-py3-none-any.whl", hash = "sha256:86c204949eb9dd8e21ca28e5ee1f7b774a72f57f998ef7fba8a4ca41dd5a2554"},
+]
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "prompt-toolkit"
 version = "3.0.43"
 description = "Library for building powerful interactive command lines in Python"
@@ -3036,4 +3050,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7d070820fd460e1412c48ad481b3d450d6dfea27cea9fc219d9538c5679f0028"
+content-hash = "326577f029c83caa9ef01f527594b9cfab240fa246cf57b6f011f7923c10197b"
