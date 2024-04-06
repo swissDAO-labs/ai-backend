@@ -4,7 +4,6 @@ import os
 import hashlib
 from typing import Union
 from pathlib import Path
-from datetime import datetime
 
 from PIL import Image
 from pinatapy import PinataPy

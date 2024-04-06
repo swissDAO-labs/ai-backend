@@ -47,6 +47,7 @@ packaging==24.0 ; python_version >= "3.10" and python_version < "4.0"
 parso==0.8.3 ; python_version >= "3.10" and python_version < "4.0"
 pexpect==4.9.0 ; python_version >= "3.10" and python_version < "4.0" and (sys_platform != "win32" and sys_platform != "emscripten")
 pillow==10.3.0 ; python_version >= "3.10" and python_version < "4.0"
+pinatapy-vourhey==0.2.0 ; python_version >= "3.10" and python_version < "4.0"
 prompt-toolkit==3.0.43 ; python_version >= "3.10" and python_version < "4.0"
 psutil==5.9.8 ; python_version >= "3.10" and python_version < "4.0"
 ptyprocess==0.7.0 ; python_version >= "3.10" and python_version < "4.0" and (sys_platform != "win32" and sys_platform != "emscripten")
